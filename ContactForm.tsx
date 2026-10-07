@@ -1,0 +1,7 @@
+ "use client";
+import {useState} from "react";
+export default function ContactForm(){
+ const [form,setForm]=useState({name:"",email:"",phone:"",service:"",message:""}); const [status,setStatus]=useState("");
+ async function submit(e:React.FormEvent){e.preventDefault();setStatus("Sending...");const r=await fetch("/api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});setStatus(r.ok?"Thanks! Your request was submitted.":"Something went wrong.");}
+ return <form onSubmit={submit} className="glass space-y-4 rounded-2xl p-6">{["name","email","phone","service"].map(k=><input key={k} required={k==="name"||k==="email"} placeholder={k[0].toUpperCase()+k.slice(1)} value={(form as any)[k]} onChange={e=>setForm({...form,[k]:e.target.value})} className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 outline-none focus:border-[#00BF63]"/>)}<textarea required placeholder="Message" rows={6} value={form.message} onChange={e=>setForm({...form,message:e.target.value})} className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 outline-none focus:border-[#00BF63]"/><button className="btn-primary w-full">Send Request</button>{status&&<p className="text-sm text-[#00BF63]">{status}</p>}</form>
+}

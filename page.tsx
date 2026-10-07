@@ -1,0 +1,5 @@
+ "use client";
+import {useState} from "react"; import {createClient} from "@/lib/supabase/client"; import {useRouter} from "next/navigation";
+export default function Login(){const [email,setEmail]=useState("");const [password,setPassword]=useState("");const [error,setError]=useState("");const router=useRouter();
+async function login(e:React.FormEvent){e.preventDefault();const supabase=createClient();const {error}=await supabase.auth.signInWithPassword({email,password});if(error)setError(error.message);else router.push("/admin");}
+return <main className="container-x flex min-h-[75vh] items-center justify-center"><form onSubmit={login} className="glass w-full max-w-md space-y-4 rounded-2xl p-7"><h1 className="text-3xl font-bold">Admin Login</h1><input className="w-full rounded-xl bg-black/30 p-3" type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)}/><input className="w-full rounded-xl bg-black/30 p-3" type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)}/><button className="btn-primary w-full">Login</button>{error&&<p className="text-sm text-red-400">{error}</p>}</form></main>}
